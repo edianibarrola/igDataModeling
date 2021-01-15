@@ -32,10 +32,12 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True)
-    username = Column(String(50))
+    username = Column(String(50), nullable=False )
     firstname = Column(String(50))
     lastname = Column(String(50))
-    email = Column(String(100))
+    email = Column(String(100), nullable=False)
+    comments = relationship("Comment")
+    follower_id = Column(Integer, ForeignKey("follower.id"))
 
 class Follower(Base):
     __tablename__ = "follower"
@@ -43,6 +45,7 @@ class Follower(Base):
     id = Column(Integer, primary_key=True)
     user_from_id = Column(Integer, ForeignKey("user.id"))
     user_to_id = Column(Integer, ForeignKey("user.id"))
+    user_id = relationship("user.id")
 
 class Comment(Base):
     __tablename__ = "comment"
@@ -50,6 +53,7 @@ class Comment(Base):
     comment_text = Column(String(200))
     author_id = Column(Integer, ForeignKey("user.id"))
     post_id = Column(Integer, ForeignKey("post.id"))
+    user_id = Column(Integer, ForeignKey("user.id"))
 
 class Post(Base):
     __tablename__ = "post"
